@@ -5,27 +5,45 @@ import collections
 from six.moves import cPickle
 import numpy as np
 import re
-import itertools
 
-class TextLoader():
+
+class TextLoader:
     def __init__(self, data_dir, batch_size, seq_length, encoding=None):
         self.data_dir = data_dir
         self.batch_size = batch_size
         self.seq_length = seq_length
 
+        chat_file = os.path.join(data_dir, "_chat.txt")
         input_file = os.path.join(data_dir, "input.txt")
         vocab_file = os.path.join(data_dir, "vocab.pkl")
         tensor_file = os.path.join(data_dir, "data.npy")
 
-        # Let's not read voca and data from file. We many change them.
+        # Let's not read vocab and data from file. We many change them.
         if True or not (os.path.exists(vocab_file) and os.path.exists(tensor_file)):
             print("reading text file")
+            self.format_chat(chat_file, input_file)
             self.preprocess(input_file, vocab_file, tensor_file, encoding)
         else:
             print("loading preprocessed files")
             self.load_preprocessed(vocab_file, tensor_file)
         self.create_batches()
         self.reset_batch_pointer()
+
+    def format_chat(self, chat_file, formatted_file):
+        """
+        Formats a WhatsApp chat log into a script-like format
+        :param chat_file: Chat export "_chat.txt" file
+        :param formatted_file: File that will be used to train the RNN
+        :return:
+        """
+        ignore_list = ["<‎image omitted>", "<‎GIF omitted>", "http"]
+
+        with open(chat_file, 'r') as f, open(formatted_file, 'w') as fo:
+            for line in f:
+                line = line[23:]  # Remove timestamp and newline at end
+                if not any(word in line for word in ignore_list) and len(line) > 0 and ":" in line:
+                    formatted_line = line.replace(": ", ":\n") + "\n"
+                    fo.write(formatted_line)
 
     def clean_str(self, string):
         """

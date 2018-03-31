@@ -10,9 +10,10 @@ from six.moves import cPickle
 from utils import TextLoader
 from model import Model
 
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--data_dir', type=str, default='data/tinyshakespeare',
+    parser.add_argument('--data_dir', type=str, default='data',
                        help='data directory containing input.txt')
     parser.add_argument('--input_encoding', type=str, default=None,
                        help='character encoding of input.txt, from https://docs.python.org/3/library/codecs.html#standard-encodings')
@@ -52,6 +53,7 @@ def main():
                         """)
     args = parser.parse_args()
     train(args)
+
 
 def train(args):
     data_loader = TextLoader(args.data_dir, args.batch_size, args.seq_length, args.input_encoding)
@@ -129,6 +131,7 @@ def train(args):
                     saver.save(sess, checkpoint_path, global_step = e * data_loader.num_batches + b)
                     print("model saved to {}".format(checkpoint_path))
         train_writer.close()
+
 
 if __name__ == '__main__':
     main()

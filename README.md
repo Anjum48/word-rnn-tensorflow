@@ -1,15 +1,19 @@
-# word-rnn-tensorflow
+# WhatsApp Group Chatbot (word-rnn-tensorflow)
 [![Build Status](https://travis-ci.org/hunkim/word-rnn-tensorflow.svg?branch=master)](https://travis-ci.org/hunkim/word-rnn-tensorflow)
 
 Multi-layer Recurrent Neural Networks (LSTM, RNN) for word-level language models in Python using TensorFlow.
 
 Mostly reused code from https://github.com/sherjilozair/char-rnn-tensorflow which was inspired from Andrej Karpathy's [char-rnn](https://github.com/karpathy/char-rnn).
+This was forked from https://github.com/hunkim/word-rnn-tensorflow
 
 # Requirements
 - [Tensorflow 1.1.0rc0](http://www.tensorflow.org)
 
 # Basic Usage
-To train with default parameters on the tinyshakespeare corpus, run:
+First export your group chat (without the media) to create a
+"_chat.txt" file. Put the file in the data folder
+
+To train with default parameters on the chap corpus, run:
 ```bash
 python train.py
 ```
